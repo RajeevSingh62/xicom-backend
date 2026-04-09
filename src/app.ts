@@ -10,13 +10,15 @@ import formRoutes from "./modules/form/form.routes";
 const app: Application = express();
 
 
-app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://xicom.netlify.app"
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://xicom.netlify.app", 
+    ],
+    credentials: true,
+  })
+);
 
 
 app.use(express.json());
