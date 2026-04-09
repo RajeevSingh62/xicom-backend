@@ -3,11 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCandidates = exports.createCandidate = exports.uploadDocument = void 0;
+exports.createCandidate = exports.uploadDocument = void 0;
 const form_model_1 = __importDefault(require("./form.model"));
-/* ============================================================
-   Helper — calculate age from date of birth
-============================================================ */
 const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -19,10 +16,6 @@ const calculateAge = (dob) => {
     }
     return age;
 };
-/* ============================================================
-   POST /api/candidate/upload
-   Uploads a single document to Cloudinary and returns the URL
-============================================================ */
 const uploadDocument = async (req, res, next) => {
     try {
         if (!req.file) {
@@ -32,7 +25,6 @@ const uploadDocument = async (req, res, next) => {
             });
             return;
         }
-        // Cloudinary URL is available in req.file.path
         const fileUrl = req.file.path;
         res.status(200).json({
             success: true,
@@ -47,11 +39,6 @@ const uploadDocument = async (req, res, next) => {
     }
 };
 exports.uploadDocument = uploadDocument;
-/* ============================================================
-   POST /api/candidate
-   Creates a new candidate with personal info, addresses,
-   and document URLs
-============================================================ */
 const createCandidate = async (req, res, next) => {
     try {
         const { firstName, lastName, email, dob, resStreet1, resStreet2, perStreet1, perStreet2, documents } = req.body;
@@ -96,7 +83,6 @@ const createCandidate = async (req, res, next) => {
                 return;
             }
         }
-        /* ---------- 4. Save candidate to MongoDB ---------- */
         const candidate = await form_model_1.default.create({
             firstName,
             lastName,
@@ -115,7 +101,6 @@ const createCandidate = async (req, res, next) => {
         });
     }
     catch (error) {
-        // Handle Mongoose duplicate key error (email already exists)
         if (typeof error === "object" &&
             error !== null &&
             "code" in error &&
@@ -130,21 +115,3 @@ const createCandidate = async (req, res, next) => {
     }
 };
 exports.createCandidate = createCandidate;
-/* ============================================================
-   GET /api/candidate
-   Returns all submitted candidates
-============================================================ */
-const getAllCandidates = async (_req, res, next) => {
-    try {
-        const candidates = await form_model_1.default.find().sort({ createdAt: -1 });
-        res.status(200).json({
-            success: true,
-            count: candidates.length,
-            data: candidates,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-};
-exports.getAllCandidates = getAllCandidates;

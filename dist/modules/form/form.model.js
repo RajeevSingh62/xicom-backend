@@ -34,9 +34,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-/* ============================================================
-   Candidate Schema
-============================================================ */
 const CandidateSchema = new mongoose_1.Schema({
     firstName: {
         type: String,
