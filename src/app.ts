@@ -11,7 +11,10 @@ const app: Application = express();
 
 
 app.use(cors({
-  origin: ["http://localhost:3000", "https://your-frontend.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://xicom-frontend-h5kn.vercel.app"
+  ],
   credentials: true
 }));
 
